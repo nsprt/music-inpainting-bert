@@ -45,6 +45,12 @@ class Predictor(BasePredictor):
         chords: str = Input(
             description="Chords (one chord per bar), with each bar separated by '|'. Use '?' for bars you want in-painted."
         ),
+        lead_instrument: str = Input(
+            description="Lead instrument"
+        ),
+        accompanying_instrument: str = Input(
+            description="Accompanying instrument"
+        ),
         time_signature: int = Input(
             default=4, choices=[3, 4, 5, 7], description="Time signature"
         ),
@@ -89,6 +95,8 @@ class Predictor(BasePredictor):
             n_patterns_sample=sample_width,
             time_sig=time_signature,
             tempo=tempo,
+            lead_instrument=lead_instrument,
+            accompanying_instrument=accompanying_instrument,
         )
         track.write(str(midi_path))
 

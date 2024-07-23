@@ -375,6 +375,8 @@ def generate_from_strings(
     chord_names_inv: Dict[Chord, str],
     config: HuggingFaceConfig,
     tempo: int = 120,
+    lead_instrument,
+    accompanying_instrument,
     time_sig: int = 4,
     mask_prob=0.1,
     n_patterns_sample=50,
@@ -476,20 +478,22 @@ def generate_from_strings(
         pattern_map_inv,
         chord_map_inv,
         tempo,
+        lead_instrument,
+        accompanying_instrument,
         time_sig,
     )
 
 
 def generate_song(
-    pattern_vec, chord_vec, pattern_map_inv, chord_map_inv, tempo, time_sig
+    pattern_vec, chord_vec, pattern_map_inv, chord_map_inv, tempo, lead_instrument, accompanying_instrument, time_sig
 ):
     sec_per_beat = 60 / tempo
 
     track = pm.PrettyMIDI(initial_tempo=tempo)
     track.time_signature_changes.append(pm.TimeSignature(time_sig, 4, 0))
 
-    lead = pm.Instrument(pm.instrument_name_to_program("Lead 2 (sawtooth)"))
-    accomp = pm.Instrument(pm.instrument_name_to_program("Synth Choir"))
+    lead = pm.Instrument(pm.instrument_name_to_program(lead_instrument))
+    accomp = pm.Instrument(pm.instrument_name_to_program(accompanying_instrument))
     drum = pm.Instrument(0, is_drum=True)
 
     write_notes(lead, pattern_vec, pattern_map_inv, sec_per_beat)
